@@ -44,7 +44,7 @@ class HomeLayout extends StatelessWidget {
                     onPressed: () {
                       Scaffold.of(context).openDrawer();
                     },
-                    icon:  Icon(Icons.menu_open, color: Colors.black, size: 35),
+                    icon:  const Icon(Icons.menu, color: Colors.black, size: 35),
                   ),
           ),
           title: Text(

@@ -20,12 +20,32 @@ class UploadsList extends StatefulWidget {
   State<UploadsList> createState() => _UploadsListState();
 }
 
-class _UploadsListState extends State<UploadsList> {
+class _UploadsListState extends State<UploadsList> with RouteAware {
   List<HouseResponse> resp = [];
 
   @override
   void initState() {
     super.initState();
+    _fetchUploads();
+    // Register the route observer
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final route = ModalRoute.of(context);
+      if (route is PageRoute) {
+        routeObserver.subscribe(this, route);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Unregister the route observer
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Called when the current route has been popped off and the user returns to this route
     _fetchUploads();
   }
 
@@ -152,7 +172,6 @@ class _UploadsListState extends State<UploadsList> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       action: SnackBarAction(
         label: 'Close',
-        
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
@@ -173,3 +192,6 @@ class _UploadsListState extends State<UploadsList> {
     ));
   }
 }
+
+// Define a global route observer
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();

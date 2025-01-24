@@ -91,7 +91,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return HomeLayout(
         hasBack: true,
-        title: 'Search',
+        title: 'Search Houses',
         isSuccess: false,
         child: SingleChildScrollView(
           child: Form(
@@ -103,6 +103,10 @@ class _SearchState extends State<Search> {
                   width: MediaQuery.of(context).size.width,
                   child: TextField(
                     controller: _SearchFieldController,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
                       hintText: 'Enter search value',
@@ -209,12 +213,12 @@ class _SearchState extends State<Search> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Padding(
-                     padding: const EdgeInsets.only(left:16.0, top: 10),
-                     child: Text("Occupation Date", style: GoogleFonts.montserrat(
-                        fontSize: 16, color: Colors.black87
-                                       )),
-                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, top: 10),
+                    child: Text("Occupation Date",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 16, color: Colors.black87)),
+                  ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -245,8 +249,7 @@ class _SearchState extends State<Search> {
                         flex: 1,
                         child: buildDateTextField(
                           controller: _endDateController,
-                          hintText:
-                              DateFormat.yMMMMd('en_US').format(endDate),
+                          hintText: DateFormat.yMMMMd('en_US').format(endDate),
                           fieldType: 'end',
                           onTap: () {
                             setState(() {
@@ -514,15 +517,15 @@ class _SearchState extends State<Search> {
     return GestureDetector(
       onTap: onTap,
       child: AbsorbPointer(
-        child:CustomTextField(
-            controller: controller
-              ..text = DateFormat('dd/MM/yyyy').format(DateTime.now()),
-            labelText: fieldType == 'start' ? 'Start Date' : 'End Date',
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter occupation date'
-                : null,
-            // inputFormatters: [DateFormatter()],
-          ),
+        child: CustomTextField(
+          controller: controller
+            ..text = DateFormat('dd/MM/yyyy').format(DateTime.now()),
+          labelText: fieldType == 'start' ? 'Start Date' : 'End Date',
+          validator: (value) => value == null || value.isEmpty
+              ? 'Please enter occupation date'
+              : null,
+          // inputFormatters: [DateFormatter()],
+        ),
       ),
     );
   }

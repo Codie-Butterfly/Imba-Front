@@ -70,74 +70,170 @@ class _SearchResultsState extends State<SearchResults> {
     return HomeLayout(
       hasBack: true,
       title: 'Search Results',
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CustomTextButton(
-                        color: isSearch ? ColorConstants.yellow : Colors.black,
-                        fontSize: 20,
-                        name: 'SEARCH',
-                        onSubmit: () {
-                          setState(() {
-                            isSearch = true;
-                            isViews = false;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                          width: 50,
-                          child: Divider(
-                              thickness: 5,
-                              color: isSearch ? Colors.black : Colors.white)),
-                    ],
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CustomTextButton(
-                        color: isViews ? ColorConstants.yellow : Colors.black,
-                        fontSize: 20,
-                        name: 'VIEWS',
-                        onSubmit: () {
-                          setState(() {
-                            isViews = true;
-                            isSearch = false;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                          width: 50,
-                          child: Divider(
-                              thickness: 5,
-                              color: isViews ? Colors.black : Colors.white)),
-                    ],
-                  ),
-                ],
+      child: Expanded(
+        // Adding Expanded here to bound the height
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomTextButton(
+                          color:
+                              isSearch ? ColorConstants.yellow : Colors.black,
+                          fontSize: 20,
+                          name: 'SEARCH',
+                          onSubmit: () {
+                            setState(() {
+                              isSearch = true;
+                              isViews = false;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                            width: 50,
+                            child: Divider(
+                                thickness: 5,
+                                color: isSearch ? Colors.black : Colors.white)),
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomTextButton(
+                          color: isViews ? ColorConstants.yellow : Colors.black,
+                          fontSize: 20,
+                          name: 'VIEWS',
+                          onSubmit: () {
+                            setState(() {
+                              isViews = true;
+                              isSearch = false;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                            width: 50,
+                            child: Divider(
+                                thickness: 5,
+                                color: isViews ? Colors.black : Colors.white)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            Row(
-              children: [
-                Text("City: ${widget.city} "),
-                Text("Area: ${widget.area} "),
-                Text("Rent : ${widget.minRent}-${widget.maxRent}")
-              ],
-            ),
-
-            //  const CustomListView(),
-            Visibility(
-                visible: isSearch,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "City: ${widget.city} ",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: "Montserrat",
+                      ),
+                    ),
+                    Text(
+                      "Area: ${widget.area} ",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Montserrat",
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(
+                      "Rent : ${widget.minRent}-${widget.maxRent}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Montserrat",
+                        fontSize: 20,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              // Wrapping ListViews with Expanded or Flexible to resolve infinite height issue
+              // Expanded(
+              //   child: Visibility(
+              //     visible: isSearch,
+              //   child: InfiniteSearchResult(
+              //     isSearch: true,
+              //     page: 0,
+              //     size: 0,
+              //     token: '', // Replace with actual token if needed
+              //     searchParams: SearchParams(
+              //       area: widget.area!,
+              //       city: widget.city!,
+              //       contact: widget.contact,
+              //       electricityInclusive: widget.electricityInclusive,
+              //       isBorehole: widget.isBorehole,
+              //       isDeposit: widget.isDeposit,
+              //       isGated: widget.isGated,
+              //       isSolar: widget.isSolar,
+              //       isTiled: widget.isTiled,
+              //       isWalled: widget.isWalled,
+              //       maxRent: widget.maxRent,
+              //       minRent: widget.minRent,
+              //       waterInclusive: widget.waterInclusive,
+              //       classification: widget.classification,
+              //       endDate: widget.endDate,
+              //       searchValue: widget.searchValue,
+              //       startDate: widget.startDate,
+              //       type: widget.type,
+              //       minRooms: widget.minNumberRooms,
+              //       maxRooms: widget.maxNumberRooms,
+              //     ),
+              //   ),
+              // ),
+              // ),
+              isSearch
+                  ? Container(
+                      //screen height - appbar height - bottom navigation bar height
+                      height: MediaQuery.of(context).size.height,
+                      child: InfiniteSearchResult(
+                        isSearch: true,
+                        page: 0,
+                        size: 0,
+                        token: '', // Replace with actual token if needed
+                        searchParams: SearchParams(
+                          area: widget.area!,
+                          city: widget.city!,
+                          contact: widget.contact,
+                          electricityInclusive: widget.electricityInclusive,
+                          isBorehole: widget.isBorehole,
+                          isDeposit: widget.isDeposit,
+                          isGated: widget.isGated,
+                          isSolar: widget.isSolar,
+                          isTiled: widget.isTiled,
+                          isWalled: widget.isWalled,
+                          maxRent: widget.maxRent,
+                          minRent: widget.minRent,
+                          waterInclusive: widget.waterInclusive,
+                          classification: widget.classification,
+                          endDate: widget.endDate,
+                          searchValue: widget.searchValue,
+                          startDate: widget.startDate,
+                          type: widget.type,
+                          minRooms: widget.minNumberRooms,
+                          maxRooms: widget.maxNumberRooms,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+             isViews? Container(
+                height: MediaQuery.of(context).size.height,
                 child: InfiniteSearchResult(
-                    isSearch: true,
+                  isSearch: false,
+                  page: 0,
+                  size: 0,
+                  token: '', // Replace with actual token if needed
+                  searchParams: SearchParams(
                     area: widget.area!,
                     city: widget.city!,
                     contact: widget.contact,
@@ -150,9 +246,6 @@ class _SearchResultsState extends State<SearchResults> {
                     isWalled: widget.isWalled,
                     maxRent: widget.maxRent,
                     minRent: widget.minRent,
-                    page: 0,
-                    size: 0,
-                    token: '',
                     waterInclusive: widget.waterInclusive,
                     classification: widget.classification,
                     endDate: widget.endDate,
@@ -160,43 +253,14 @@ class _SearchResultsState extends State<SearchResults> {
                     startDate: widget.startDate,
                     type: widget.type,
                     minRooms: widget.minNumberRooms,
-                    maxRooms: widget.maxNumberRooms)),
-            // child: const InfiniteSearchResult(isSearch: true,)),
-            // child: const Infinite()),
-
-            Visibility(
-                visible: isViews,
-                child: InfiniteSearchResult(
-                    isSearch: false,
-                    area: widget.area!,
-                    city: widget.city!,
-                    contact: widget.contact,
-                    electricityInclusive: widget.electricityInclusive,
-                    isBorehole: widget.isBorehole,
-                    isDeposit: widget.isDeposit,
-                    isGated: widget.isGated,
-                    isSolar: widget.isSolar,
-                    isTiled: widget.isTiled,
-                    isWalled: widget.isWalled,
-                    maxRent: widget.maxRent,
-                    minRent: widget.minRent,
-                    page: 0,
-                    size: 0,
-                    token: '',
-                    waterInclusive: widget.waterInclusive,
-                    classification: widget.classification,
-                    endDate: widget.endDate,
-                    searchValue: widget.searchValue,
-                    startDate: widget.startDate,
-                    type: widget.type,
-                    minRooms: widget.minNumberRooms,
-                    maxRooms: widget.maxNumberRooms)),
-            // child: const CustomSearchListView(isSearch: false,))
-          ],
+                    maxRooms: widget.maxNumberRooms,
+                  ),
+                ),
+              ) : const SizedBox(),
+            ],
+          ),
         ),
       ),
     );
-    // ),
-    // );
   }
 }

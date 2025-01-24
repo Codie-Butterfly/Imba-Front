@@ -43,7 +43,7 @@ class _AppointmentInfiniteState extends State<AppointmentInfinite> {
   @override
   Widget build(BuildContext context) {
     return HomeLayout(
-      hasBack: false,
+      hasBack: true,
       title: "Appointments",
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
@@ -149,29 +149,32 @@ class _AppointmentInfiniteState extends State<AppointmentInfinite> {
     final hasRequests =
         state.meetingRequestsResponse.requests?.isNotEmpty ?? false;
 
-    return Column(
-      children: [
-        Visibility(
-          visible: isMeeting,
-          child: hasMeetings
-              ? SingleChildScrollView(
-                  child: MeetingsList(
-                    meetingsList: state.meetingRequestsResponse.meetings!,
-                  ),
-                )
-              : _buildEmptyState("No Meetings Available"),
-        ),
-        Visibility(
-          visible: isRequest,
-          child: hasRequests
-              ? SingleChildScrollView(
-                  child: AppointmentListView(
-                    requestsList: state.meetingRequestsResponse.requests!,
-                  ),
-                )
-              : _buildEmptyState("No Requests Available"),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Visibility(
+            visible: isMeeting,
+            child: hasMeetings
+                ? SingleChildScrollView(
+                    child: MeetingsList(
+                      meetingsList: state.meetingRequestsResponse.meetings!,
+                    ),
+                  )
+                : _buildEmptyState("No Meetings Available"),
+          ),
+          Visibility(
+            visible: isRequest,
+            child: hasRequests
+                ? SingleChildScrollView(
+                    child: AppointmentListView(
+                      requestsList: state.meetingRequestsResponse.requests!,
+                    ),
+                  )
+                : _buildEmptyState("No Requests Available"),
+          ),
+        ],
+      ),
     );
   }
 

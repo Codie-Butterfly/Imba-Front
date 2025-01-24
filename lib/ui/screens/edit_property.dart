@@ -70,7 +70,6 @@ class _EditPropertyState extends State<EditProperty> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.deposit);
     return HomeLayout(
         hasBack: true,
         title: 'Edit Property',

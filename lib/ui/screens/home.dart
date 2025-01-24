@@ -42,19 +42,22 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return HomeLayout(
       hasBack: false,
       isSuccess: isSuccess,
       child: Center(
         child: Column(
           children: [
-            const SizedBox(
-              height: 50,
-            ),
+           
             // const Logo(),
             Container(
-              height: 200,
-              width: 200,
+              // height: 150,
+              // width: 200,
+              //30 % of the screen width
+              width: MediaQuery.of(context).size.width * 0.3,
+              height: MediaQuery.of(context).size.width * 0.3,
+
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/home_icon.png'),
@@ -88,10 +91,10 @@ class _HomeState extends State<Home> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                "Welcome to Nyumba, your one-stop platform for uploading and searching for houses to rent. Get started by uploading your property or searching for your dream home.",
+                "Welcome to Imba, your one-stop platform for uploading and searching for houses to rent. Get started by uploading your property or searching for your dream home.",
                 textAlign: TextAlign.center,
                 
-                style: GoogleFonts.montserrat(color: Colors.black, fontSize: 27, ),
+                style: GoogleFonts.montserrat(color: Colors.black,fontSize:screenWidth * 0.07 , ),
               ),
             ),
             const Spacer(),

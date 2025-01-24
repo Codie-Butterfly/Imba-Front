@@ -123,7 +123,7 @@ class _UploadDetailsState extends State<UploadDetails> {
   Widget build(BuildContext context) {
     return HomeLayout(
       hasBack: true,
-      title: 'Upload Details',
+      title: 'Upload House Details',
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -259,13 +259,20 @@ class _UploadDetailsState extends State<UploadDetails> {
                 const SizedBox(height: 15),
                 Center(
                   child: SizedBox(
-                    //80% of the screen width
                     width: MediaQuery.of(context).size.width * 0.7,
                     height: 60,
                     child: BlocListener<UploadBloc, UploadState>(
                       listener: (context, state) {
-                        if (state is UploadSuccessState) {
-                          // Navigate to the next screen or show success message
+                        if (state is UploadLoadingState) {
+                          // Show loading dialog
+                          LoadingDialog.show(context);
+                        } else {
+                          // Dismiss loading dialog if it exists
+                          LoadingDialog.dismiss(context);
+                        }
+
+                        if (state is UploadSuccessState || state is UploadHouseSuccessState) {
+                          // Navigate to the next screen
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -279,15 +286,6 @@ class _UploadDetailsState extends State<UploadDetails> {
                               backgroundColor: Colors.red,
                             ),
                           );
-                        } else if (state is UploadLoadingState) {
-                          // Show loading indicator
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return const LoadingIndicator();
-                            },
-                          );
                         }
                       },
                       child: CustomElevateButton(
@@ -295,7 +293,6 @@ class _UploadDetailsState extends State<UploadDetails> {
                         name: 'Submit',
                         onSubmit: () {
                           if (_formKey.currentState!.validate()) {
-                            // Dispatch upload event with form data
                             BlocProvider.of<UploadBloc>(context).add(
                               UploadHouseEvent(
                                 area: _areaController.text,
@@ -342,7 +339,7 @@ class _UploadDetailsState extends State<UploadDetails> {
     String? Function(String?)? validator,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 0.0),
       child: CustomTextField(
         controller: controller,
         labelText: labelText,
@@ -363,7 +360,6 @@ class _UploadDetailsState extends State<UploadDetails> {
         value: value,
         decoration: InputDecoration(
           labelText: label,
-       
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
             borderSide: BorderSide(color: ColorConstants.yellow),
@@ -384,7 +380,9 @@ class _UploadDetailsState extends State<UploadDetails> {
         items: items.map((String item) {
           return DropdownMenuItem<String>(
             value: item,
-            child: Text(item, style: GoogleFonts.montserrat(fontSize: 16, color: Colors.black87)),
+            child: Text(item,
+                style: GoogleFonts.montserrat(
+                    fontSize: 16, color: Colors.black87)),
           );
         }).toList(),
       ),
@@ -422,8 +420,33 @@ class _UploadDetailsState extends State<UploadDetails> {
           value: value,
           onChanged: onChanged,
         ),
-        Text(label, style: GoogleFonts.montserrat(fontSize: 16, color: Colors.black87)),
+        Text(label,
+            style: GoogleFonts.montserrat(fontSize: 16, color: Colors.black87)),
       ],
     );
+  }
+}
+
+class LoadingDialog {
+  static bool isShowing = false;
+
+  static void show(BuildContext context) {
+    if (!isShowing) {
+      isShowing = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const LoadingIndicator();
+        },
+      );
+    }
+  }
+
+  static void dismiss(BuildContext context) {
+    if (isShowing && Navigator.canPop(context)) {
+      isShowing = false;
+      Navigator.pop(context);
+    }
   }
 }

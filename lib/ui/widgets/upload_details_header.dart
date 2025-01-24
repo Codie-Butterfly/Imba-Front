@@ -11,10 +11,13 @@ class CustomUploadDetailsHeaders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      header,
-      style: TextStyle(fontSize: 20.sp),
-      textAlign: TextAlign.start,
+    return Padding(
+      padding: const EdgeInsets.only(left:15.0),
+      child: Text(
+        header,
+        style: TextStyle(fontSize: 20.sp, color: Colors.black),
+        textAlign: TextAlign.start,
+      ),
     );
   }
 }

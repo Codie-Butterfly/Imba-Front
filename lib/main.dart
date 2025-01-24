@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'NYUMBA',
+          title: 'Imba',
           theme: CustomTheme.lightTheme,
           onGenerateRoute: _appRouter.onGenerateRoute,
         ),

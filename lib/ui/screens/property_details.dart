@@ -67,42 +67,46 @@ class _PropertyDetailsState extends State<PropertyDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UploadBloc, UploadState>(builder: (context, state) {
-      if (state is GetHouseByIdSuccess) {
-        houseDetails = state.houseResponse;
-        isActivated = state.houseResponse.house!.activated!;
-        _processImageUrls(state.houseResponse.pics!);
+    return HomeLayout(
+      hasBack: true,
+      title: "Property Details", // We will update the title based on the state
+      actions: [
+        //edit icon button
+        IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined)),
+      ],
+      child: BlocBuilder<UploadBloc, UploadState>(
+        builder: (context, state) {
+          if (state is GetHouseByIdSuccess) {
+            // Assign the house details and activate status
+            houseDetails = state.houseResponse;
+            isActivated = state.houseResponse.house!.activated!;
+            _processImageUrls(state.houseResponse.pics!);
 
-        return HomeLayout(
-          hasBack: true,
-          title: "Property Details ${houseDetails.house?.type}",
-          actions: [
-            //edit icon button
-            IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined)),
-          ],
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildCarousel(),
-                    const SizedBox(height: 15),
-                    _buildPropertyInfo(state.houseResponse),
-                    const Divider(),
-                    _buildContactInfo(state.houseResponse),
-                    const SizedBox(height: 15),
-                    _buildActivateButton(),
-                  ],
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildCarousel(),
+                      const SizedBox(height: 15),
+                      _buildPropertyInfo(state.houseResponse),
+                      const Divider(),
+                      _buildContactInfo(state.houseResponse),
+                      const SizedBox(height: 15),
+                      _buildActivateButton(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      }
-      return const LoadingIndicator();
-    });
+            );
+          }
+
+          return const LoadingIndicator();
+        },
+      ),
+    );
   }
 
   Widget _buildCarousel() {
@@ -281,7 +285,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             context.read<ActivateBloc>().stream.listen((activateState) {
               if (activateState is ActivateHouseSuccess) {
                 _showSnackBar(context, 'Property activated successfully');
-              }else if(activateState is ActivateFailedState){
+              } else if (activateState is ActivateFailedState) {
                 _showSnackBar(context, activateState.message);
               }
             });
@@ -295,7 +299,6 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       action: SnackBarAction(
         label: 'Close',
-        
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },

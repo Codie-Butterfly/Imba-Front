@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:imba/bloc/actions/actions_bloc.dart';
 import 'package:imba/bloc/actions/actions_event.dart';
+import 'package:imba/ui/layouts/home_layout.dart';
 import 'package:imba/ui/screens/appointment.dart';
 import 'package:imba/ui/screens/view_house.dart';
 import 'package:imba/utilities/constants.dart';
@@ -35,136 +36,141 @@ class ActionsOptions extends StatefulWidget {
 class _ActionsOptionsState extends State<ActionsOptions> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SingleChildScrollView(
+    return HomeLayout(
+        title: 'House Actions',
+        hasBack: true,
+        child: SingleChildScrollView(
             child: SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: const [
-                  Logo(
-                      imageUrl: 'assets/images/houseicon.png',
-                      height: 100,
-                      width: 100),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    CustomTextButton(
-                      color: Colors.black,
-                      fontSize: 20.sp,
-                      name: 'Set Viewing Appointment',
-                      onSubmit: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  Appointment(
-                                    action: 'UPDATE',
-                                    houseId: widget.houseId)));
-                      },
-                    ),
-                    BlocListener<ActionsBloc, ActionsState>(
-                      listener: (context, state) {},
-                      child: BlocBuilder<ActionsBloc, ActionsState>(
-                          builder: (context, state) {
-                        if (state is InterestLoadingState) {
-                          return const LoadingIndicator();
-                        }
-                        if (state is InterestSuccessState) {
-                          SchedulerBinding.instance!.addPostFrameCallback((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  const Text('Interest initiated successfully'),
-                              action: SnackBarAction(
-                                label: "",
-                                onPressed: () {},
-                              ),
-                            ));
-
-
-                          });
-
-                          SchedulerBinding.instance!.addPostFrameCallback((_) {
-                            BlocProvider.of<ActionsBloc>(context)
-                                .add(ResetEvent());
-                            Navigator.of(context)..pop()..pop();
-                          });
-                        }
-                        if (state is InterestFailedState) {
-                          if (state.message
-                              .contains("can not review your own house")) {
-                            SchedulerBinding.instance!
-                                .addPostFrameCallback((_) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const PropertyError(
-                                          errorMessage:
-                                              'Error!, You can not rate your own house')));
-                            });
-                          }
-                          if (state.message.contains("not registered")) {
-                            SchedulerBinding.instance!
-                                .addPostFrameCallback((_) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const PropertyError(
-                                          errorMessage:
-                                              'Complete your profile first')));
-                            });
-                          } else {
-                            SchedulerBinding.instance!
-                                .addPostFrameCallback((_) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const PropertyError(
-                                          errorMessage:
-                                              'failed to initiate interest')));
-                            });
-                          }
-                          BlocProvider.of<ActionsBloc>(context)
-                              .add(ResetEvent());
-                        }
-
-                        return CustomTextButton(
+          height: MediaQuery.of(context).size.height,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: const [
+                      Logo(
+                          imageUrl: 'assets/images/houseicon.png',
+                          height: 100,
+                          width: 100),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20),
+                        CustomTextButton(
                           color: Colors.black,
                           fontSize: 20.sp,
-                          name: 'Initiate House Interest',
+                          name: 'Set Viewing Appointment',
                           onSubmit: () {
-                            BlocProvider.of<ActionsBloc>(context).add(
-                                InitiateInterestEvent(
-                                    houseId: widget.houseId!));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Appointment(
+                                        action: 'UPDATE',
+                                        houseId: widget.houseId)));
                           },
-                        );
-                      }),
-                    ),
-                    CustomTextButton(
-                      color: Colors.black,
-                      fontSize: 20.sp,
-                      name: 'Ratings',
-                      onSubmit: () {
-                        showAlertDialog(context, widget.houseId!);
-                      },
-                    ),
-                  ]),
+                        ),
+                        BlocListener<ActionsBloc, ActionsState>(
+                          listener: (context, state) {},
+                          child: BlocBuilder<ActionsBloc, ActionsState>(
+                              builder: (context, state) {
+                            if (state is InterestLoadingState) {
+                              return const LoadingIndicator();
+                            }
+                            if (state is InterestSuccessState) {
+                              SchedulerBinding.instance!
+                                  .addPostFrameCallback((_) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: const Text(
+                                      'Interest initiated successfully'),
+                                  action: SnackBarAction(
+                                    label: "",
+                                    onPressed: () {},
+                                  ),
+                                ));
+                              });
+
+                              SchedulerBinding.instance!
+                                  .addPostFrameCallback((_) {
+                                BlocProvider.of<ActionsBloc>(context)
+                                    .add(ResetEvent());
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop();
+                              });
+                            }
+                            if (state is InterestFailedState) {
+                              if (state.message
+                                  .contains("can not review your own house")) {
+                                SchedulerBinding.instance!
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const PropertyError(
+                                              errorMessage:
+                                                  'Error!, You can not rate your own house')));
+                                });
+                              }
+                              if (state.message.contains("not registered")) {
+                                SchedulerBinding.instance!
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const PropertyError(
+                                              errorMessage:
+                                                  'Complete your profile first')));
+                                });
+                              } else {
+                                SchedulerBinding.instance!
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const PropertyError(
+                                              errorMessage:
+                                                  'failed to initiate interest')));
+                                });
+                              }
+                              BlocProvider.of<ActionsBloc>(context)
+                                  .add(ResetEvent());
+                            }
+
+                            return CustomTextButton(
+                              color: Colors.black,
+                              fontSize: 20.sp,
+                              name: 'Initiate House Interest',
+                              onSubmit: () {
+                                BlocProvider.of<ActionsBloc>(context).add(
+                                    InitiateInterestEvent(
+                                        houseId: widget.houseId!));
+                              },
+                            );
+                          }),
+                        ),
+                        CustomTextButton(
+                          color: Colors.black,
+                          fontSize: 20.sp,
+                          name: 'Ratings',
+                          onSubmit: () {
+                            showAlertDialog(context, widget.houseId!);
+                          },
+                        ),
+                      ]),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    )));
+          ),
+        )));
   }
 
   var currentRating = 0;
@@ -191,10 +197,10 @@ class _ActionsOptionsState extends State<ActionsOptions> {
                 onPressed: () {},
               ),
             ));
-            Navigator.of(context)..pop()..pop();
-
+            Navigator.of(context)
+              ..pop()
+              ..pop();
           });
-
         }
 
         if (state is RateFailedState) {
@@ -223,7 +229,7 @@ class _ActionsOptionsState extends State<ActionsOptions> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                           PropertyError(errorMessage: state.message)));
+                          PropertyError(errorMessage: state.message)));
             });
           }
 
@@ -253,7 +259,7 @@ class _ActionsOptionsState extends State<ActionsOptions> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text("rate this house after viewing.",
+          const Text("Rate this house after viewing.",
               style: TextStyle(color: ColorConstants.yellow)),
           const SizedBox(height: 20),
           Row(

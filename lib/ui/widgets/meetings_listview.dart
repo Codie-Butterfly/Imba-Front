@@ -22,71 +22,104 @@ class _MeetingsListState extends State<MeetingsList> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.6,
-      child:widget.meetingsList.isNotEmpty?ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget.meetingsList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Expanded(
-                    flex: 1,
-                    child: Column(children: [
-                      Logo(
-                          imageUrl: 'assets/images/houseicon.png',
-                          width: 110.sp,
-                          height: 110.sp)
-                    ])),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Text("FROM: ${widget.meetingsList[index].startDate}",
-                     Text( "FROM:"+DateTime.parse(widget.meetingsList[index].startDate!).toLocal().toString(),
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Montserrat")),
-                                  Text("TO: "+DateTime.parse(widget.meetingsList[index].endDate!).toLocal().toString(),
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Montserrat")),
-                                ]),
-                          ),
-                          Expanded(
-                            child: Column(children: [
-                              Text("${widget.meetingsList[index].house!.id}\n${widget.meetingsList[index].house!.area}\n${widget.meetingsList[index].house!.city}",
-                                  style: TextStyle(
-                                      color: ColorConstants.yellow,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: "Montserrat")),
-                            ]),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Container(
-                              color: ColorConstants.grey,
-                              child: Text(widget.meetingsList[index].approved! ?"APPROVED" :"PENDING"  ,
-                                  style: TextStyle(fontSize: 15.sp)))
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                    ],
+      child: widget.meetingsList.isNotEmpty
+          ? ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.meetingsList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                    border: Border.all(
+                        color: Colors.grey.withOpacity(0.6),
+                        width: 0.8), // Grey outline
                   ),
-                ),
-              ]),
-            );
-          }):const Text("No meetings"),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: Column(children: [
+                              Logo(
+                                  imageUrl: 'assets/images/houseicon.png',
+                                  width: 110.sp,
+                                  height: 110.sp)
+                            ])),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Text("FROM: ${widget.meetingsList[index].startDate}",
+                                          Text(
+                                              "FROM:" +
+                                                  UtilCustom.formatDate(widget
+                                                      .meetingsList[index]
+                                                      .startDate!),
+                                              style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Montserrat")),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                              "TO: " +
+                                                  UtilCustom.formatDate(widget
+                                                      .meetingsList[index]
+                                                      .endDate!),
+                                              style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: "Montserrat")),
+                                        ]),
+                                  ),
+                                  Expanded(
+                                    child: Column(children: [
+                                      Text(
+                                          "${widget.meetingsList[index].house!.id}\n${widget.meetingsList[index].house!.area}\n${widget.meetingsList[index].house!.city}",
+                                          style: TextStyle(
+                                              color: ColorConstants.yellow,
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: "Montserrat")),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          color: ColorConstants.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0)),
+                                      child: Text(
+                                          widget.meetingsList[index].approved!
+                                              ? "APPROVED"
+                                              : "PENDING",
+                                          style: TextStyle(
+                                              fontSize: 15.sp,
+                                              color: Colors.black)))
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      ]),
+                );
+              })
+          : const Text("No meetings"),
     );
   }
 }

@@ -36,7 +36,14 @@ class _AppointmentListViewState extends State<AppointmentListView> {
               shrinkWrap: true,
               itemCount: widget.requestsList.length,
               itemBuilder: (BuildContext context, int index) {
-                return Card(
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                    border: Border.all(
+                        color: Colors.grey.withOpacity(0.6),
+                        width: 0.8), // Grey outline
+                  ),
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
