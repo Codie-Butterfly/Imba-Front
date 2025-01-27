@@ -28,7 +28,7 @@ class ActivateBloc extends Bloc<ActivateEvent, ActivateState> {
             name: LOG_NAME);
         emit(ActivateHouseSuccess(isActivated: isActivated,));
       } on SocketException catch (err) {
-        dev.log('Failed to activate house, error: ${err.message}',
+        dev.log('Failed to activate house, error: ${err.toString().replaceAll("Exception:","")}',
             name: LOG_NAME);
         emit(ActivateFailedState(err.toString()));
       } catch (err) {

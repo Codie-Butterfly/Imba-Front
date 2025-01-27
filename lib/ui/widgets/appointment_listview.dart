@@ -47,8 +47,8 @@ class _AppointmentListViewState extends State<AppointmentListView> {
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Expanded(
-                            child: Column(children: const [
+                        const Expanded(
+                            child: Column(children: [
                           Logo(
                               imageUrl: 'assets/images/houseicon.png',
                               width: 100,
@@ -76,7 +76,7 @@ class _AppointmentListViewState extends State<AppointmentListView> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: "Montserrat")),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             _isApproved(widget.requestsList[index].approved!,
@@ -116,7 +116,7 @@ class _AppointmentListViewState extends State<AppointmentListView> {
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "Montserrat")),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           _isApproved(widget.requestsList[index].approved!,

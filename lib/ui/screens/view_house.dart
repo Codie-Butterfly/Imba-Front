@@ -446,7 +446,7 @@ class _ViewHouseState extends State<ViewHouse> {
     if (state.message.contains("not registered")) {
       _navigateToErrorPage(context, 'Set up profile first');
     } else {
-      _navigateToErrorPage(context, 'Error occurred');
+      _navigateToErrorPage(context, state.message ?? 'Failed to activate');
     }
     BlocProvider.of<ActivateBloc>(context).add(ActivationResetEvent());
   }

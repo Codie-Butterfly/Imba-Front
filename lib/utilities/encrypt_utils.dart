@@ -23,9 +23,9 @@ Encrypted encrypt(String keyString, String plainText) {
   return encryptedData;
 }
 
- String decryptAES(String base64Text, String key) {
-print(base64Text);
-String decrypted =decrypt(key, Encrypted.fromBase64(base64Text));
-print(decrypted);
-return decrypted;
+String decryptAES(String base64Text, String key) {
+  print(base64Text);
+  String decrypted = decrypt(key, Encrypted.fromBase64(base64Text));
+  print(decrypted);
+  return decrypted;
 }

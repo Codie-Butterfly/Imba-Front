@@ -96,7 +96,7 @@ class _UploadDetailsState extends State<UploadDetails> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: ColorConstants.yellow,
               onPrimary: Colors.black,
               onSurface: Colors.black,

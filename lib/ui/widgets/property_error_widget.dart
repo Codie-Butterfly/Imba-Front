@@ -21,16 +21,20 @@ class PropertyError extends StatelessWidget {
               imageUrl: 'assets/images/houseicon.png', height: 200, width: 200),
           Text("ERROR !",
               style: TextStyle(
-                  color: ColorConstants.yellow,
+                  color: Colors.red,
                   fontFamily: "Montserrat",
                   fontSize: 25.sp)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           Text(errorMessage,
-              style: TextStyle(fontFamily: "Montserrat", fontSize: 10.sp)),
-          const SizedBox(height: 10),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: 20.sp,
+                  color: Colors.red)),
+          const SizedBox(height: 15),
           CustomElevateButton(
             name: 'Try Again',
-            color: Colors.orange,
+            color: Colors.red,
             onSubmit: () {
               //navigate back to search page
               Navigator.pop(context);

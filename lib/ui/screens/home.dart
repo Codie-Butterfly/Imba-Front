@@ -49,7 +49,6 @@ class _HomeState extends State<Home> {
       child: Center(
         child: Column(
           children: [
-           
             // const Logo(),
             Container(
               // height: 150,
@@ -71,14 +70,15 @@ class _HomeState extends State<Home> {
             const Text(
               "IMBA",
               style: TextStyle(
-                backgroundColor: Colors.transparent,
-                fontFamily: 'Antreas',
-                fontSize: 80,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange
-              ),
+                  backgroundColor: Colors.transparent,
+                  fontFamily: 'Antreas',
+                  fontSize: 90,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orange),
             ),
-          
+            const SizedBox(
+              height: 20,
+            ),
             // const CustomOpaqueContainer(
             //   name: "NYUMBA",
             //   googleFontStyle: TextStyle(
@@ -89,12 +89,15 @@ class _HomeState extends State<Home> {
             //   ),
             // ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(40),
               child: Text(
-                "Welcome to Imba, your one-stop platform for uploading and searching for houses to rent. Get started by uploading your property or searching for your dream home.",
+                // "Welcome to Imba, your one-stop platform for uploading and searching for houses to rent. Get started by uploading your property or searching for your dream home.",
+                "Accommodation Simplified",
                 textAlign: TextAlign.center,
-                
-                style: GoogleFonts.montserrat(color: Colors.black,fontSize:screenWidth * 0.07 , ),
+                style: GoogleFonts.montserrat(
+                  color: Colors.black,
+                  fontSize: screenWidth * 0.11,
+                ),
               ),
             ),
             const Spacer(),
@@ -105,7 +108,7 @@ class _HomeState extends State<Home> {
                   if (state is TypesSuccessState) {
                     types = state.types.types;
                   }
-        
+
                   if (state is ClassificationsSuccessState) {
                     classifications = state.classifications.classifications;
                     setState(() {

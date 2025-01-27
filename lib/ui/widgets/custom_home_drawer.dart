@@ -2,17 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:imba/ui/screens/appointments_infinite.dart';
-import 'package:imba/ui/screens/lease_agreements.dart';
-import 'package:imba/ui/screens/uploads.dart';
+import 'package:imba/bloc/user/user_bloc.dart';
+import 'package:imba/utilities/constants.dart';
+import 'package:imba/utilities/encrypt_utils.dart';
 
+import '../screens/appointments_infinite.dart';
+import '../screens/lease_agreements.dart';
+import '../screens/uploads.dart';
 import '../screens/register.dart';
 import '../screens/viewed.dart';
+class CustomHomeDrawer extends StatefulWidget {
+  const CustomHomeDrawer({Key? key}) : super(key: key);
 
-class CustomHomeDrawer extends StatelessWidget {
-  const CustomHomeDrawer({
-    Key? key,
-  }) : super(key: key);
+  @override
+  State<CustomHomeDrawer> createState() => _CustomHomeDrawerState();
+}
+
+class _CustomHomeDrawerState extends State<CustomHomeDrawer> {
+  late final UserBloc _userBloc;
+  late String _firstName;
+  late String _email;
+
+  @override
+  void initState() {
+    super.initState();
+    _userBloc = BlocProvider.of<UserBloc>(context);
+
+    // Retrieve and decrypt user details from the UserBloc
+    _firstName = _userBloc.firstName.isNotEmpty
+        ? _decryptUserData(_userBloc.firstName)
+        : 'First Name'; // Default value
+
+    _email = _userBloc.email.isNotEmpty
+        ? _decryptUserData(_userBloc.email)
+        : 'user@example.com'; // Default value
+  }
+
+  String _decryptUserData(String data) {
+    try {
+      return data.isEmpty ? '' : decryptAES(data, key);
+    } catch (e) {
+      // If decryption fails, return the original data
+      return data;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +61,20 @@ class CustomHomeDrawer extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                   children: [
-                    // User avatar
-                    
                     const CircleAvatar(
                       backgroundColor: Colors.grey,
                       radius: 35, // Adjust the size as needed
-                      backgroundImage: AssetImage('assets/images/avatar.jpg',),
+                      backgroundImage: AssetImage(
+                        'assets/images/avatar.jpg',
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    // User email and edit icon
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'First Name', // Replace with user's email
+                            _firstName,
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
                               fontSize: 18.sp,
@@ -50,7 +82,7 @@ class CustomHomeDrawer extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            'user@example.com', // Replace with user's email
+                            _email,
                             style: GoogleFonts.montserrat(
                               color: Colors.white,
                               fontSize: 16.sp,
@@ -77,9 +109,11 @@ class CustomHomeDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AppointmentInfinite()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AppointmentInfinite(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -96,9 +130,11 @@ class CustomHomeDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LeaseAgreements()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LeaseAgreements(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -115,9 +151,11 @@ class CustomHomeDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UploadsList()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UploadsList(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -133,8 +171,12 @@ class CustomHomeDrawer extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Viewed()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Viewed(),
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -151,9 +193,11 @@ class CustomHomeDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Register()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Register(),
+                    ),
+                  );
                 },
               ),
             ],

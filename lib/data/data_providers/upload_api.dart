@@ -221,22 +221,37 @@ class UploadApi {
   Future<bool> activateHouse(int houseId, String token) async {
     try {
       final response = await http.post(
-          Uri.parse('$BASE_URL/house/activate?houseId=$houseId&token=$token'),
-          headers: <String, String>{}).timeout(const Duration(seconds: 100));
+        Uri.parse('$BASE_URL/house/activate?houseId=$houseId&token=$token'),
+        headers: <String, String>{},
+      ).timeout(const Duration(seconds: 100));
 
       if (response.statusCode == 200) {
         return true;
       }
+
       if (response.statusCode == 400 &&
           response.body.contains(
               "Request could not be completed with incomplete PROFILE kindly navigate to Options tab on Home Page and complete your profile to proceed.")) {
         throw Exception("not registered");
-      } else {
-        var res = ErrorResponse.fromJson(jsonDecode(response.body));
-        throw Exception(res.details);
       }
+
+      if (response.statusCode == 424) {
+        // Handle payment error code specifically
+        dev.log('Payment Error: ${response.body}', name: logName);
+        throw Exception(response.body); // Directly throw the message
+      }
+
+      // Parse other error responses
+      var res = ErrorResponse.fromJson(jsonDecode(response.body));
+      dev.log('Error Response: ' + res.toString(), name: logName);
+      throw Exception(res.details);
     } catch (e) {
-      dev.log('Failed to activate: $e', name: logName);
+      // Handle exceptions
+      dev.log('Error: ' + e.toString(), name: logName);
+      if (e is FormatException) {
+        // Handle specific parsing issue
+        throw Exception("Unexpected response format: ${e.message}");
+      }
       throw Exception(e.toString());
     }
   }

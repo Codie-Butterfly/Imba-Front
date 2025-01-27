@@ -116,7 +116,8 @@ class _UploadsListState extends State<UploadsList> with RouteAware {
 
   Widget _buildContent(UploadState state) {
     if (state is UploadLoadingState) {
-      return const LoadingIndicator();
+      return const SizedBox();
+      // return const LoadingIndicator();
     } else if (state is GetUploadsSuccessState) {
       return _buildUploadsList(state.uploadsResponse);
     } else if (state is UploadFailedState) {
