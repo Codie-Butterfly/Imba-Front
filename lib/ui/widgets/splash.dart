@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +7,7 @@ import 'package:imba/bloc/user/user_bloc.dart';
 import 'package:imba/bloc/user/user_event.dart';
 import 'package:imba/bloc/user/user_state.dart';
 import 'package:imba/secure_storage/secure_storage_manager.dart';
-import 'package:mac_address/mac_address.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'custom_elevated_button.dart';
 import 'loading_indicator.dart';
 
@@ -34,20 +36,37 @@ class _SplashState extends State<Splash> {
     if (isAccepted == 'true') {
       _navigateToHome();
     } else {
-      final macAddress = await _initMacAddress();
-      _userBloc.add(CreateUserEvent(macAddress: macAddress));
+      final deviceId = await _initDeviceId();
+      _userBloc.add(CreateUserEvent(macAddress: deviceId));
     }
   }
 
-  Future<String> _initMacAddress() async {
+  Future<String> _initDeviceId() async {
     try {
-      final macAddress = await GetMac.macAddress;
+      final deviceInfo = DeviceInfoPlugin();
+      String deviceId;
+
+      if (kIsWeb) {
+        final webInfo = await deviceInfo.webBrowserInfo;
+        deviceId = webInfo.userAgent ?? 'web-user';
+      } else if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        // Use Android ID - persists across reinstalls (resets on factory reset)
+        deviceId = androidInfo.id;
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        // Use identifierForVendor - persists until all vendor apps are uninstalled
+        deviceId = iosInfo.identifierForVendor ?? 'unknown-ios-device';
+      } else {
+        deviceId = 'unknown-device';
+      }
+
       setState(() {
-        _deviceMAC = macAddress;
+        _deviceMAC = deviceId;
       });
-      return macAddress;
+      return deviceId;
     } on PlatformException {
-      return 'Error getting the MAC address.';
+      return 'Error getting device ID.';
     }
   }
 
